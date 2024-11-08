@@ -2,23 +2,29 @@ const Room = require("../../models/Room");
 
 module.exports = (socket) => {
     console.log("User connected to chat namespace:", socket.id);
+    const phone = "123456789"
+    //socket.phone;
+    socket.on("joinRoom", async () => {
 
-    socket.on("joinRoom", async ({ phone }) => {
         const room = await Room.findOne({ phone });
+
         if (room) {
             socket.join(room.phone);
-            socket.emit("joinedRoom", `Joined room for ${phone}`);
+            socket.to(room.phone).emit("joinedRoom", `Joined room for ${phone}`);
         } else {
             socket.emit("error", "Room not found");
         }
     });
 
-    socket.on("sendMessage", async ({ phone, message }) => {
+    socket.on("sendMessage", async ({ message }) => {
+
         const room = await Room.findOne({ phone });
+
         if (room) {
             room.messages.push(message);
+            socket.emit("receiveMessage",  message );
             await room.save();
-            socket.to(phone).emit("receiveMessage", { message });
+            socket.to(room.phone).emit("receiveMessage", { message });
         } else {
             socket.emit("error", "Room not found");
         }
