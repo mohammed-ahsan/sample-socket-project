@@ -13,7 +13,7 @@ exports.createRoom = async (req, res) => {
                 productId,
                 productTitle,
                 productImage,
-                participants: [user1Id, user2Id]
+                participants: {user1Id, user2Id}
             });
             await room.save();
         }

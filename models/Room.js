@@ -12,7 +12,10 @@ const roomSchema = new mongoose.Schema({
     productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
     productTitle: { type: String, required: true },
     productImage: { type: String, required: true },
-    participants: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }],
+    participants: { 
+        sender: { type: String, required: true }, 
+        receiver: { type: String, required: true }
+    },
     messages: [messageSchema],
     blockedUsers: [{ type: String, required: true }],
     blocked: { type: Boolean, default: false } // Indicates if the conversation is blocked
