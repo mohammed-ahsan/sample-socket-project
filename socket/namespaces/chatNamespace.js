@@ -1,9 +1,12 @@
 const Room = require("../../models/Room");
 
 module.exports = (socket) => {
+    
     console.log("User connected to chat namespace:", socket.id);
-    const phone = "123456789"
-    //socket.phone;
+    
+    // const phone = "123456789" // < comment out this line and comment socket.phone for client test 
+    socket.phone;
+
     socket.on("joinRoom", async () => {
 
         const room = await Room.findOne({ phone });
